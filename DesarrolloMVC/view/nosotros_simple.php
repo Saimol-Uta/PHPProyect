@@ -310,39 +310,23 @@
                     <div class="grid">
                         <div class="field">
                             <label for="cedula">Cédula</label>
-                            <input id="cedula" name="cedula" type="text" minlength="10" maxlength="10" pattern="[0-9]{10}" required />
+                            <input id="cedula" name="cedula" type="text" minlength="6" maxlength="20" required />
                         </div>
                         <div class="field">
-                            <label for="email">Email</label>
-                            <input id="email" name="email" type="email" required />
+                            <label for="nombre">Nombre</label>
+                            <input id="nombre" name="nombre" type="text" required />
                         </div>
                         <div class="field">
-                            <label for="nombres">Nombres</label>
-                            <input id="nombres" name="nombres" type="text" required />
+                            <label for="apellido">Apellido</label>
+                            <input id="apellido" name="apellido" type="text" required />
                         </div>
                         <div class="field">
-                            <label for="apellidos">Apellidos</label>
-                            <input id="apellidos" name="apellidos" type="text" required />
+                            <label for="direccion">Dirección</label>
+                            <input id="direccion" name="direccion" type="text" />
                         </div>
                         <div class="field">
                             <label for="telefono">Teléfono</label>
-                            <input id="telefono" name="telefono" type="text" minlength="10" maxlength="10" pattern="[0-9]{10}" />
-                        </div>
-                        <div class="field">
-                            <label for="carrera">Carrera</label>
-                            <input id="carrera" name="carrera" type="text" required />
-                        </div>
-                        <div class="field">
-                            <label for="semestre">Semestre (1-10)</label>
-                            <input id="semestre" name="semestre" type="number" min="1" max="10" required />
-                        </div>
-                        <div class="field">
-                            <label for="fecha_nacimiento">Fecha de nacimiento</label>
-                            <input id="fecha_nacimiento" name="fecha_nacimiento" type="date" required />
-                        </div>
-                        <div class="field full">
-                            <label for="direccion">Dirección</label>
-                            <input id="direccion" name="direccion" type="text" required />
+                            <input id="telefono" name="telefono" type="text" />
                         </div>
                     </div>
                 </form>
@@ -418,18 +402,16 @@
             window.closeModal = closeModal;
         })();
 
-        // Cargar estudiantes
+        // Cargar estudiantes usando la API local (Api.php)
         async function cargarEstudiantes() {
             const cont = document.getElementById('tablaEstudiantes');
             cont.innerHTML = '<div class="alert info">Cargando estudiantes...</div>';
             try {
-                const res = await fetch('models/select.php');
-                const data = await res.json();
-                if (!data.success) {
-                    throw new Error(data.error || 'No se pudo cargar');
-                }
-                const ests = data.data || [];
-                if (ests.length === 0) {
+                const res = await fetch('http://localhost/Servicios/practicaApiPHP/api.php', {
+                    method: 'GET'
+                });
+                const ests = await res.json();
+                if (!Array.isArray(ests) || ests.length === 0) {
                     cont.innerHTML = '<div class="alert">No hay estudiantes registrados.</div>';
                     return;
                 }
@@ -437,22 +419,19 @@
                 html += '<div class="table-responsive">';
                 html += '<table class="table">';
                 html += '<thead><tr>' +
-                    '<th>#</th><th>Cédula</th><th>Nombres</th><th>Apellidos</th><th>Email</th><th>Teléfono</th><th>Carrera</th><th>Semestre</th><th>F.Nac.</th>' + (esAdmin ? '<th>Acciones</th>' : '') +
+                    '<th>#</th><th>Cédula</th><th>Nombres</th><th>Apellidos</th><th>Dirección</th><th>Teléfono</th>' + (esAdmin ? '<th>Acciones</th>' : '') +
                     '</tr></thead><tbody>';
                 ests.forEach((e, i) => {
                     html += '<tr>' +
                         `<td>${i+1}</td>` +
                         `<td>${e.cedula||''}</td>` +
-                        `<td>${e.nombres||''}</td>` +
-                        `<td>${e.apellidos||''}</td>` +
-                        `<td>${e.email||''}</td>` +
+                        `<td>${e.nombre||''}</td>` +
+                        `<td>${e.apellido||''}</td>` +
+                        `<td>${e.direccion||''}</td>` +
                         `<td>${e.telefono||''}</td>` +
-                        `<td>${e.carrera||''}</td>` +
-                        `<td>${e.semestre??''}</td>` +
-                        `<td>${e.fecha_nacimiento||''}</td>` +
                         (esAdmin ? `<td><div class="row-actions">
-                                            <button class="btn" onclick="editarEstudiante(${e.id})">Editar</button>
-                                            <button class="btn danger" onclick="confirmarEliminar(${e.id}, '${(e.nombres||'').replace(/'/g, "\'")} ${(e.apellidos||'').replace(/'/g, "\'")}')">Eliminar</button>
+                                            <button class="btn" onclick="editarEstudiante('${encodeURIComponent(e.cedula)}')">Editar</button>
+                                            <button class="btn danger" onclick="confirmarEliminar('${encodeURIComponent(e.cedula)}', '${(e.nombre||'').replace(/'/g, "\\'")} ${(e.apellido||'').replace(/'/g, "\\'")}')">Eliminar</button>
                                     </div></td>` : '') +
                         '</tr>';
                 });
@@ -490,26 +469,41 @@
             }
         });
 
-        // Guardar/Editar estudiante
+        // Guardar/Editar estudiante usando Api.php
         async function guardarEstudiante() {
             if (!esAdmin) {
                 alert('No autorizado');
                 return;
             }
-            const form = document.getElementById('formEstudiante');
-            const formData = new FormData(form);
-            const id = formData.get('id');
-            const url = id ? 'models/editar.php' : 'models/guardar.php';
+            const cedula = document.getElementById('cedula').value.trim();
+            const nombre = document.getElementById('nombre').value.trim();
+            const apellido = document.getElementById('apellido').value.trim();
+            const direccion = document.getElementById('direccion').value.trim();
+            const telefono = document.getElementById('telefono').value.trim();
+            const id = document.getElementById('estudianteId').value;
             try {
-                const res = await fetch(url, {
-                    method: 'POST',
-                    body: formData
-                });
-                const data = await res.json();
-                if (!data.success) {
-                    throw new Error(data.message || 'Error al guardar');
+                let res;
+                if (id) {
+                    // PUT via query string as CRUD expects
+                    const params = `cedula=${encodeURIComponent(cedula)}&nombre=${encodeURIComponent(nombre)}&apellido=${encodeURIComponent(apellido)}&direccion=${encodeURIComponent(direccion)}&telefono=${encodeURIComponent(telefono)}`;
+                    res = await fetch(`http://localhost/Servicios/practicaApiPHP/api.php?${params}`, {
+                        method: 'PUT'
+                    });
+                } else {
+                    const body = new URLSearchParams();
+                    body.append('cedula', cedula);
+                    body.append('nombre', nombre);
+                    body.append('apellido', apellido);
+                    body.append('direccion', direccion);
+                    body.append('telefono', telefono);
+                    res = await fetch('http://localhost/Servicios/practicaApiPHP/api.php', {
+                        method: 'POST',
+                        body
+                    });
                 }
-                document.getElementById('msgEstudiante').innerHTML = `<div class="alert">${data.message || 'Guardado correctamente'}</div>`;
+                const data = await res.json();
+                // CRUD devuelve generalmente un mensaje en JSON (por ejemplo "Insertado")
+                document.getElementById('msgEstudiante').innerHTML = `<div class="alert">Operación completada</div>`;
                 setTimeout(() => {
                     closeModal('modalEstudiante');
                     cargarEstudiantes();
@@ -526,7 +520,7 @@
         document.getElementById('btnRefrescar').addEventListener('click', cargarEstudiantes);
 
         // Editar
-        async function editarEstudiante(id) {
+        async function editarEstudiante(cedula) {
             if (!esAdmin) {
                 alert('No autorizado');
                 return;
@@ -534,23 +528,19 @@
             resetFormulario();
             document.getElementById('modalEstudianteLabel').textContent = 'Editar Estudiante';
             try {
-                const res = await fetch(`models/editar.php?id=${id}`);
-                const data = await res.json();
-                if (!data.success) {
-                    throw new Error(data.message || 'No se pudo cargar');
-                }
-                const e = data.data;
-                document.getElementById('estudianteId').value = e.id;
+                const res = await fetch('http://localhost/Servicios/practicaApiPHP/api.php', {
+                    method: 'GET'
+                });
+                const lista = await res.json();
+                const e = (Array.isArray(lista) ? lista : []).find(x => x.cedula === decodeURIComponent(cedula));
+                if (!e) throw new Error('Estudiante no encontrado');
+                document.getElementById('estudianteId').value = e.cedula;
                 document.getElementById('cedula').value = e.cedula;
                 document.getElementById('cedula').setAttribute('readonly', 'readonly');
-                document.getElementById('nombres').value = e.nombres || '';
-                document.getElementById('apellidos').value = e.apellidos || '';
-                document.getElementById('email').value = e.email || '';
-                document.getElementById('telefono').value = e.telefono || '';
-                document.getElementById('carrera').value = e.carrera || '';
-                document.getElementById('semestre').value = e.semestre || '';
-                document.getElementById('fecha_nacimiento').value = e.fecha_nacimiento || '';
+                document.getElementById('nombre').value = e.nombre || '';
+                document.getElementById('apellido').value = e.apellido || '';
                 document.getElementById('direccion').value = e.direccion || '';
+                document.getElementById('telefono').value = e.telefono || '';
                 openModal('modalEstudiante');
             } catch (err) {
                 alert('Error: ' + err.message);
@@ -575,17 +565,10 @@
                 return;
             }
             try {
-                const res = await fetch('models/eliminar.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: `id=${encodeURIComponent(eliminarId)}`
+                const res = await fetch(`http://localhost/Servicios/practicaApiPHP/api.php?cedula=${eliminarId}`, {
+                    method: 'DELETE'
                 });
-                const data = await res.json();
-                if (!data.success) {
-                    throw new Error(data.message || 'No se pudo eliminar');
-                }
+                // CRUD devuelve json con mensaje, podemos ignorarlo y refrescar
                 closeModal('modalConfirmarEliminar');
                 cargarEstudiantes();
             } catch (err) {
