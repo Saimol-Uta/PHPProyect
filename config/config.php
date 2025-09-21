@@ -26,6 +26,7 @@ define('VIEWS_PATH', BASE_PATH . '/views/');
 define('CSS_PATH', BASE_PATH . '/css/');
 define('JS_PATH', BASE_PATH . '/jquery/');
 define('IMG_PATH', BASE_PATH . '/img/');
+define('DesarrolloMVC_PATH', BASE_PATH . '/DesarrolloMVC/');
 
 // URLs para el frontend
 define('CSS_URL', ROOT_URL . 'css/');
@@ -44,6 +45,11 @@ function getPath($type, $file = '')
             return MODELS_PATH . $file;
         case 'view':
             return VIEWS_PATH . $file;
+        case 'DesarrolloMVC':
+            return DesarrolloMVC_PATH . $file;
+        case 'DesarrolloMVC/view':
+            // Permitir llamadas como getPath('DesarrolloMVC/view', 'archivo.php')
+            return DesarrolloMVC_PATH . 'view/' . $file;
         case 'css':
             return CSS_PATH . $file;
         case 'js':

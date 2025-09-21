@@ -61,6 +61,13 @@ class MvcController
     public function template()
     {
         // Las funciones de auth.php ya están disponibles desde index.php
+        // Si la acción solicitada es 'nosotros', cargar la vista directamente
+        // sin envolverla en la plantilla global.
+        if ($this->enlacesController === 'nosotros') {
+            $this->EnlacesPaginasController();
+            return;
+        }
+
         includeFile('view', 'template.php');
     }
     public function EnlacesPaginasController()
