@@ -1,0 +1,174 @@
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 0.2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+
+        th, td {
+            padding: 142px 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+            font-size: 14px; /* Tamaño de letra más grande */
+        }
+
+        th {
+            font-size: 16px; /* Tamaño de letra más grande */
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        thead tr {
+            background-color: #4A5568; /* Un gris más oscuro */
+            color: #333;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2; /* Filas alternas con color */
+        } 
+
+
+        .modal-background{
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-background.visible {
+            display: flex;             /* Lo hace visible */
+            align-items: center;       /* Lo centra VERTICALMENTE */
+            justify-content: center;   /* Lo centra HORIZONTALMENTE */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin-top: 50vh;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .btn-edit, .btn-delete, .btn-new, .btn-save, .btn-confirm, .btn-cancelar {
+            border: none;
+            padding: 8px 52px;
+            border-radius: 0.2rem;
+            color: white;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+
+        .btn-edit {
+            background-color: #4A5568;
+        }
+
+        .btn-delete {
+            background-color: #7D0303;
+        }
+        .btn-new {
+            background-color: #4A5568;
+            margin-bottom: 10px;
+        }
+        .btn-save {
+            background-color: #7D0303;
+        }
+        .btn-confirm {
+            background-color: #7D0303;
+        }
+        .btn-cancelar {
+            background-color: #4A5568;
+        }
+
+        .btn-edit:hover, .btn-delete:hover, .btn-new:hover, .btn-save:hover, .btn-confirm:hover, .btn-cancelar:hover {
+            opacity: 0.8;
+        }
+
+        .acciones-cell {
+            text-align: center;
+            width: 160px;
+        }
+
+        .acciones-cell button {
+            margin: 0 4px;
+        }
+
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+
+        #studentForm label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold; /* Letras más gruesas para legibilidad */
+            color: #4A5568;
+        }
+
+        #studentForm input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 13.5px; /* Tamaño de letra más grande */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transición suave */
+        }
+
+        #studentForm input:focus {
+            border-color: #4299E1; /* Borde azul al seleccionar */
+            box-shadow: 0 0 0 1px rgba(66, 153, 225, 0.5); /* Sombra exterior azul */
+            outline: none; /* Quitamos el borde por defecto del navegador */
+        }
+
+        #studentForm button {
+            margin-top: 20px;
+            padding: 12px 15px;
+            box-sizing: border-box;
+            width: 100%;
+            cursor: pointer;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 0.2rem;
+        }
+
+        #studentForm button:hover {
+            background-color: #AF4040; /* Un gris un poco más claro */
+}
+
+        .modal-actions {
+    margin-top: 20px;          /* Añade un espacio arriba */
+    display: flex;             /* ¡Activa el modo Flexbox! */
+    justify-content: center;   /* Centra los botones horizontalmente */
+    gap: 15px;                 /* Crea un espacio de 15px entre los botones */
+}
