@@ -42,6 +42,8 @@
         .container-fluid {
             margin-top: 10px;
             padding-top: 10px;
+            margin-bottom: 20px;
+            /* Añadido para evitar solapamiento con footer */
         }
 
         /* Espaciado especial para formularios de login */
@@ -84,8 +86,10 @@
             min-height: 100px;
             max-height: 150px;
             object-fit: cover;
+            object-position: center;
             display: block;
             opacity: 0;
+            transition: opacity 0.3s ease-in-out;
         }
 
         .banner-img.ready {
@@ -125,6 +129,7 @@
             border-radius: 20px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
         }
 
         .user-overlay .text-white {
@@ -138,6 +143,7 @@
             padding: 0.25rem 0.5rem;
             border: 1px solid #E0E0E0;
             color: #FFFFFF;
+            transition: all 0.3s ease;
         }
 
         .user-overlay .btn:hover {
@@ -145,31 +151,244 @@
             color: #901B21;
         }
 
+        /* Media Queries para Responsividad */
+
+        /* Pantalla Flow AMOLED DotDisplay CrystalRes 1.5K de 6.67" (2712 × 1220, 446 PPP) */
+        @media screen and (max-width: 2712px) and (min-width: 1221px) and (orientation: landscape),
+        screen and (max-width: 1220px) and (min-width: 1100px) and (orientation: portrait) {
+            .banner-container {
+                min-height: 140px;
+                padding: 8px;
+            }
+
+            .banner-img {
+                max-height: 180px;
+                min-height: 130px;
+            }
+
+            .banner-placeholder {
+                font-size: 1.8rem;
+                padding: 15px;
+            }
+
+            .banner-placeholder i {
+                margin-right: 12px;
+                font-size: 2rem;
+            }
+
+            .user-overlay {
+                top: 15px;
+                right: 20px;
+                padding: 12px 20px;
+                border-radius: 25px;
+                backdrop-filter: blur(15px);
+            }
+
+            .user-overlay .text-white {
+                font-size: 1.1rem;
+                line-height: 1.3;
+            }
+
+            .user-overlay .text-white small {
+                font-size: 0.85rem;
+                margin-top: 3px;
+            }
+
+            .user-overlay .btn {
+                font-size: 0.9rem;
+                padding: 0.4rem 0.8rem;
+                margin-top: 5px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .banner-container {
+                min-height: 110px;
+            }
+
+            .banner-img {
+                max-height: 140px;
+            }
+
+            .user-overlay {
+                padding: 6px 12px;
+            }
+
+            .user-overlay .text-white {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .banner-container {
+                min-height: 100px;
+            }
+
+            .banner-img {
+                max-height: 130px;
+            }
+
+            .user-overlay {
+                top: 8px;
+                right: 10px;
+                padding: 5px 10px;
+            }
+
+            .user-overlay .text-white {
+                font-size: 0.8rem;
+            }
+
+            .user-overlay .btn {
+                font-size: 0.75rem;
+                padding: 0.2rem 0.4rem;
+            }
+        }
+
         @media (max-width: 768px) {
             .banner-container {
                 min-height: 80px;
+                flex-direction: column;
+                padding: 5px;
             }
 
             .banner-img {
                 max-height: 100px;
+                min-height: 80px;
             }
 
             .banner-placeholder {
                 font-size: 1rem;
+                padding: 10px;
             }
 
             .user-overlay {
                 position: static;
-                margin: 5px;
+                margin: 5px auto 0;
                 text-align: center;
-                border-radius: 0;
+                border-radius: 15px;
+                background: rgba(144, 27, 33, 0.95);
                 border-top: 2px solid #E0E0E0;
+                width: 95%;
+                max-width: 300px;
+            }
+
+            .user-overlay .text-white {
+                font-size: 0.85rem;
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            .user-overlay .text-white small {
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .banner-container {
+                min-height: 70px;
+            }
+
+            .banner-img {
+                max-height: 90px;
+                min-height: 70px;
+            }
+
+            .banner-placeholder {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+
+            .user-overlay {
+                margin: 8px auto 0;
+                padding: 8px 12px;
+                border-radius: 12px;
+            }
+
+            .user-overlay .text-white {
+                font-size: 0.8rem;
+            }
+
+            .user-overlay .btn {
+                font-size: 0.7rem;
+                padding: 0.15rem 0.3rem;
+                margin-top: 3px;
+            }
+        }
+
+        @media (max-width: 390px) {
+            .banner-container {
+                min-height: 75px;
+                padding: 3px;
+            }
+
+            .banner-img {
+                max-height: 95px;
+                min-height: 75px;
+            }
+
+            .banner-placeholder {
+                font-size: 0.95rem;
+                padding: 8px;
+            }
+
+            .banner-placeholder i {
+                margin-right: 8px;
+                font-size: 1.1rem;
+            }
+
+            .user-overlay {
+                margin: 6px auto 0;
+                padding: 6px 10px;
+                border-radius: 10px;
+                width: 96%;
+                max-width: 280px;
+            }
+
+            .user-overlay .text-white {
+                font-size: 0.8rem;
+                line-height: 1.2;
+            }
+
+            .user-overlay .text-white small {
+                font-size: 0.65rem;
+                margin-top: 2px;
+            }
+
+            .user-overlay .btn {
+                font-size: 0.7rem;
+                padding: 0.15rem 0.35rem;
+                margin-top: 4px;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .banner-container {
+                min-height: 60px;
+            }
+
+            .banner-img {
+                max-height: 80px;
+                min-height: 60px;
+            }
+
+            .banner-placeholder {
+                font-size: 0.8rem;
+                padding: 5px;
+            }
+
+            .user-overlay {
+                width: 98%;
+                padding: 6px 8px;
+            }
+
+            .user-overlay .text-white {
+                font-size: 0.75rem;
             }
         }
     </style>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="<?php echo getUrl('img', 'favicon.svg'); ?>">
+    <link rel="icon" type="image/svg+xml" sizes="32x32" href="<?php echo getUrl('img', 'escudo-uta232.png'); ?>">
 
     <!-- CSS no crítico carga después -->
     <link rel="stylesheet" href="<?php echo getUrl('css', 'style.css'); ?>" media="print" onload="this.media='all'">
@@ -201,8 +420,8 @@
         <div class="banner-container">
             <!-- Placeholder mientras carga el banner -->
             <div id="banner-placeholder" class="banner-placeholder">
-                <i class=""></i>
-
+                <i class="fas fa-university"></i>
+                <span>Universidad Técnica de Ambato</span>
             </div> <!-- Banner real con carga optimizada desde Cloudinary CDN -->
             <img id="banner-img"
                 src="https://res.cloudinary.com/dwwvecqnu/image/upload/f_auto,q_auto/srjxoupeycmg9yaanbz3"
@@ -220,12 +439,12 @@
                         <i class="fas fa-user"></i>
                         <?php echo htmlspecialchars($_SESSION['nombre_completo'] ?? 'Usuario'); ?>
                         <small class="d-block" style="color: #E0E0E0; font-size: 0.7rem;">
-                            <?php echo ucfirst($_SESSION['tipo_usuario'] ?? 'usuario'); ?>
+                            <?php echo ucfirst($_SESSION['usuario_tipo'] ?? 'usuario'); ?>
                         </small>
                     </span>
-                    <a href="<?php echo getUrl('', 'logout.php'); ?>" class="btn btn-sm ms-2">
+                    <!-- <a href="<?php echo getUrl('', 'logout.php'); ?>" class="btn btn-sm ms-2">
                         <i class="fas fa-sign-out-alt"></i> Salir
-                    </a>
+                    </a> -->
                 </div>
             <?php endif; ?>
         </div>
@@ -378,6 +597,26 @@
 
     <!-- jQuery carga después -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <?php
+    // Redirección automática al login cuando la sesión expire (cliente)
+    if (function_exists('isLoggedIn') && isLoggedIn()) {
+        if (function_exists('getSessionTimeRemaining')) {
+            $timeRemaining = getSessionTimeRemaining();
+            echo "<script>
+                let sessionTimeRemaining = {$timeRemaining};
+                function updateSessionTimerAuto() {
+                    if (sessionTimeRemaining <= 0) {
+                        window.location.href = 'index.php?action=login&expired=1';
+                        return;
+                    }
+                    sessionTimeRemaining--;
+                }
+                setInterval(updateSessionTimerAuto, 1000);
+            </script>";
+        }
+    }
+    ?>
 </body>
 
 </html>
