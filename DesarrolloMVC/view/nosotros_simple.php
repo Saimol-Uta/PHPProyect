@@ -269,6 +269,14 @@
         .full {
             grid-column: 1 / -1;
         }
+
+        .alert {
+            padding: 10px 12px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border: 1px solid var(--border);
+            background-color: #198754;
+        }
     </style>
 </head>
 
@@ -281,8 +289,8 @@
         <div class="toolbar">
 
             <button class="btn primary" data-modal-open="modalEstudiante">Agregar Estudiante</button>
-            <!-- 
-            <button class="btn" id="btnRefrescar">Actualizar Lista</button> -->
+
+            <button class="btn" id="btnRefrescar" hidden>Actualizar Lista</button>
         </div>
 
         <div class="card">
@@ -358,7 +366,7 @@
 
     <script>
         // Estado global básico
-        const esAdmin = 'true';
+
         let eliminarId = null;
 
         // Utilidades Modal nativo
@@ -419,7 +427,7 @@
                 html += '<div class="table-responsive">';
                 html += '<table class="table">';
                 html += '<thead><tr>' +
-                    '<th>#</th><th>Cédula</th><th>Nombres</th><th>Apellidos</th><th>Dirección</th><th>Teléfono</th>' + (esAdmin ? '<th>Acciones</th>' : '') +
+                    '<th>#</th><th>Cédula</th><th>Nombres</th><th>Apellidos</th><th>Dirección</th><th>Teléfono</th>' + '<th>Acciones</th>' +
                     '</tr></thead><tbody>';
                 ests.forEach((e, i) => {
                     html += '<tr>' +
@@ -429,10 +437,10 @@
                         `<td>${e.apellido||''}</td>` +
                         `<td>${e.direccion||''}</td>` +
                         `<td>${e.telefono||''}</td>` +
-                        (esAdmin ? `<td><div class="row-actions">
+                        `<td><div class="row-actions">
                         <button class="btn" onclick="editarEstudiante('${encodeURIComponent(e.cedula)}','${(e.nombre||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}','${(e.apellido||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}','${(e.direccion||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}','${(e.telefono||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">Editar</button>
                         <button class="btn danger" onclick="confirmarEliminar('${encodeURIComponent(e.cedula)}', '${(e.nombre||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")} ${(e.apellido||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">Eliminar</button>
-                    </div></td>` : '') +
+                    </div></td>` +
                         '</tr>';
                 });
                 html += '</tbody></table></div>';
@@ -452,10 +460,6 @@
         }
 
         function mostrarFormularioEstudiante() {
-            if (!esAdmin) {
-                alert('Solo administradores pueden agregar estudiantes.');
-                return;
-            }
             resetFormulario();
             openModal('modalEstudiante');
         }
@@ -470,10 +474,6 @@
 
         // Guardar/Editar estudiante usando Api.php
         async function guardarEstudiante() {
-            if (!esAdmin) {
-                alert('No autorizado');
-                return;
-            }
             const cedula = document.getElementById('cedula').value.trim();
             const nombre = document.getElementById('nombre').value.trim();
             const apellido = document.getElementById('apellido').value.trim();
@@ -520,10 +520,7 @@
 
         // Editar
         async function editarEstudiante(cedula, nombre, apellido, direccion, telefono) {
-            if (!esAdmin) {
-                alert('No autorizado');
-                return;
-            }
+
             resetFormulario();
             document.getElementById('modalEstudianteLabel').textContent = 'Editar Estudiante';
             try {
@@ -563,10 +560,7 @@
 
         // Eliminar
         function confirmarEliminar(id, nombre) {
-            if (!esAdmin) {
-                alert('No autorizado');
-                return;
-            }
+
             eliminarId = id;
             document.getElementById('estudianteAEliminar').textContent = `¿Eliminar a ${nombre}?`;
             openModal('modalConfirmarEliminar');
@@ -574,9 +568,7 @@
         window.confirmarEliminar = confirmarEliminar;
 
         document.getElementById('btnConfirmarEliminar').addEventListener('click', async () => {
-            if (!esAdmin) {
-                return;
-            }
+
             try {
                 const res = await fetch(`http://localhost/Servicios/practicaApiPHP/api.php?cedula=${eliminarId}`, {
                     method: 'DELETE'
