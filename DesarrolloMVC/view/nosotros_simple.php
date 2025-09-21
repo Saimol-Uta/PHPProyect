@@ -430,9 +430,9 @@
                         `<td>${e.direccion||''}</td>` +
                         `<td>${e.telefono||''}</td>` +
                         (esAdmin ? `<td><div class="row-actions">
-                                            <button class="btn" onclick="editarEstudiante('${encodeURIComponent(e.cedula)}')">Editar</button>
-                                            <button class="btn danger" onclick="confirmarEliminar('${encodeURIComponent(e.cedula)}', '${(e.nombre||'').replace(/'/g, "\\'")} ${(e.apellido||'').replace(/'/g, "\\'")}')">Eliminar</button>
-                                    </div></td>` : '') +
+                        <button class="btn" onclick="editarEstudiante('${encodeURIComponent(e.cedula)}','${(e.nombre||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}','${(e.apellido||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}','${(e.direccion||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}','${(e.telefono||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">Editar</button>
+                        <button class="btn danger" onclick="confirmarEliminar('${encodeURIComponent(e.cedula)}', '${(e.nombre||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")} ${(e.apellido||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">Eliminar</button>
+                    </div></td>` : '') +
                         '</tr>';
                 });
                 html += '</tbody></table></div>';
@@ -520,7 +520,7 @@
         document.getElementById('btnRefrescar').addEventListener('click', cargarEstudiantes);
 
         // Editar
-        async function editarEstudiante(cedula) {
+        async function editarEstudiante(cedula, nombre, apellido, direccion, telefono) {
             if (!esAdmin) {
                 alert('No autorizado');
                 return;
@@ -528,6 +528,20 @@
             resetFormulario();
             document.getElementById('modalEstudianteLabel').textContent = 'Editar Estudiante';
             try {
+                // Si se pasaron los datos desde la fila, úsalos directamente
+                if (cedula && nombre !== undefined) {
+                    const decCed = decodeURIComponent(cedula);
+                    document.getElementById('estudianteId').value = decCed;
+                    document.getElementById('cedula').value = decCed;
+                    document.getElementById('cedula').setAttribute('readonly', 'readonly');
+                    document.getElementById('nombre').value = nombre || '';
+                    document.getElementById('apellido').value = apellido || '';
+                    document.getElementById('direccion').value = direccion || '';
+                    document.getElementById('telefono').value = telefono || '';
+                    openModal('modalEstudiante');
+                    return;
+                }
+                // Fallback: pedir lista y buscar (menos eficiente)
                 const res = await fetch('http://localhost/Servicios/practicaApiPHP/api.php', {
                     method: 'GET'
                 });
@@ -578,12 +592,14 @@
 
         // Utilidades
         function establecerFechaNacimientoMaxima() {
+            const input = document.getElementById('fecha_nacimiento');
+            if (!input) return; // Evitar errores si el campo no está en esta vista
             const hoy = new Date();
             const fecha = new Date(hoy.getFullYear() - 16, hoy.getMonth(), hoy.getDate());
             const yyyy = fecha.getFullYear();
             const mm = String(fecha.getMonth() + 1).padStart(2, '0');
             const dd = String(fecha.getDate()).padStart(2, '0');
-            document.getElementById('fecha_nacimiento').setAttribute('max', `${yyyy}-${mm}-${dd}`);
+            input.setAttribute('max', `${yyyy}-${mm}-${dd}`);
         }
 
         // Inicial
