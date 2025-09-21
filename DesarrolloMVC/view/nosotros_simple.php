@@ -281,8 +281,8 @@
         <div class="toolbar">
 
             <button class="btn primary" data-modal-open="modalEstudiante">Agregar Estudiante</button>
-
-            <button class="btn" id="btnRefrescar">Actualizar Lista</button>
+            <!-- 
+            <button class="btn" id="btnRefrescar">Actualizar Lista</button> -->
         </div>
 
         <div class="card">
@@ -358,7 +358,7 @@
 
     <script>
         // Estado global básico
-        const esAdmin = <?php echo $es_admin ? 'true' : 'false'; ?>;
+        const esAdmin = 'true';
         let eliminarId = null;
 
         // Utilidades Modal nativo
@@ -448,7 +448,6 @@
             document.getElementById('estudianteId').value = '';
             document.getElementById('cedula').removeAttribute('readonly');
             document.getElementById('modalEstudianteLabel').textContent = 'Agregar Estudiante';
-            establecerFechaNacimientoMaxima();
             document.getElementById('msgEstudiante').innerHTML = '';
         }
 
@@ -591,21 +590,12 @@
         });
 
         // Utilidades
-        function establecerFechaNacimientoMaxima() {
-            const input = document.getElementById('fecha_nacimiento');
-            if (!input) return; // Evitar errores si el campo no está en esta vista
-            const hoy = new Date();
-            const fecha = new Date(hoy.getFullYear() - 16, hoy.getMonth(), hoy.getDate());
-            const yyyy = fecha.getFullYear();
-            const mm = String(fecha.getMonth() + 1).padStart(2, '0');
-            const dd = String(fecha.getDate()).padStart(2, '0');
-            input.setAttribute('max', `${yyyy}-${mm}-${dd}`);
-        }
+
 
         // Inicial
         document.addEventListener('DOMContentLoaded', () => {
             cargarEstudiantes();
-            establecerFechaNacimientoMaxima();
+
         });
     </script>
 </body>
