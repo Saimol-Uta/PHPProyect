@@ -1,10 +1,23 @@
 <?php
-// Incluir configuración si no está incluida
-if (!defined('BASE_PATH')) {
-    require_once dirname(__DIR__) . '/config/config.php';
+
+class Conexion
+{
+
+
+    public function connect()
+    {
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "SOA";
+
+
+        try {
+            $connect = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+        } catch (\Throwable $th) {
+            die("fallo conexion");
+        }
+
+        return $connect;
+    }
 }
-
-// Incluir configuración de base de datos
-require_once dirname(__DIR__) . '/config/database.php';
-
-// La conexión $conn ya está disponible desde database.php

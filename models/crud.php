@@ -1,5 +1,5 @@
 <?php
-include_once "conn.php";
+require_once __DIR__ . '/../models/Conexion.php';
 
 class CRUD
 {

@@ -9,11 +9,8 @@ class EnlacesPagina
             // Usar versiones simples para las vistas principales
             if (in_array($enlacesModel, ["inicio", "nosotros", "contactanos", "servicios"])) {
 
-                if ($enlacesModel == "nosotros") {
-                    $module = getPath('DesarrolloMVC/view', $enlacesModel . "_simple.php");
-                } else {
-                    $module = getPath('view', $enlacesModel . "_simple.php");
-                }
+
+                $module = getPath('view', $enlacesModel . "_simple.php");
             } else {
                 $module = getPath('view', $enlacesModel . ".php");
             }

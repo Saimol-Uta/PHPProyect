@@ -1,6 +1,6 @@
 <?php
+require_once __DIR__ . '/../models/crud.php';
 
-include_once "./DesarrolloMVC/Model/crud.php";
 
 $opc = $_SERVER["REQUEST_METHOD"];
 
