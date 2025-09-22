@@ -382,7 +382,7 @@
 
             $('#btnConfirmDelete').on('click', function() {
                 $.ajax({
-                    url: `${apiUrl}&cedula=${idCardForDelete}`,
+                    url: `${apiUrl}?cedula=${idCardForDelete}`,
                     type: 'DELETE',
                     dataType: 'json',
                     success: function(response) {

@@ -9,7 +9,7 @@ class EnlacesPagina
             // Usar versiones simples para las vistas principales
             if (in_array($enlacesModel, ["inicio", "nosotros", "contactanos", "servicios"])) {
 
-                if ($enlacesModel == "nosotros") {
+                if ($enlacesModel == "contactanos") {
                     $module = getPath('view', "studentsView.php");
                 } else {
                     $module = getPath('view', $enlacesModel . "_simple.php");

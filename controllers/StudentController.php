@@ -1,5 +1,5 @@
 <?php
-
+header('Content-Type: application/json; charset=utf-8');
 require_once __DIR__ . '/../models/Student.php';
 
 
@@ -43,11 +43,20 @@ switch ($method) {
         break;
 
     case 'DELETE':
-        $cedula = $_GET['cedula'] ?? null;
+        // Aceptar cédula por query string o en el cuerpo (x-www-form-urlencoded)
+        parse_str(file_get_contents("php://input"), $_DELETE);
+        $cedula = $_GET['cedula'] ?? ($_DELETE['cedula'] ?? null);
+
         if ($cedula && Student::deleteStudent($cedula)) {
             echo json_encode(['success' => true, 'message' => 'Estudiante eliminado correctamente']);
         } else {
-            echo json_encode(['success' => false, 'message' => 'Error al eliminar']);
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Error al eliminar', 'cedula' => $cedula]);
         }
+        break;
+
+    default:
+        http_response_code(405);
+        echo json_encode(['success' => false, 'message' => 'Método no permitido']);
         break;
 }

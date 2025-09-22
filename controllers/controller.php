@@ -63,7 +63,7 @@ class MvcController
         // Las funciones de auth.php ya están disponibles desde index.php
         // Si la acción solicitada es 'nosotros', cargar la vista directamente
         // sin envolverla en la plantilla global.
-        if ($this->enlacesController === 'nosotros' || $this->enlacesController === 'studentsView') {
+        if ($this->enlacesController === 'contactanos' || $this->enlacesController === 'studentsView') {
             $this->EnlacesPaginasController();
             return;
         }
